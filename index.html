@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPhone Style Toggle Switch with Confetti and Screamer</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            overflow: hidden;
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .screamer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: none; /* Убираем переход */
+        }
+
+        .screamer img {
+            width: 150%; /* Увеличиваем размер */
+            height: auto;
+        }
+
+        .screamer.show {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <label class="switch">
+        <input type="checkbox" id="toggleSwitch">
+        <span class="slider"></span>
+    </label>
+    
+    <div class="screamer" id="screamer">
+        <img src="pic\nagiev.png" alt="Screamer">
+    </div>
+
+    <!-- Add canvas-confetti library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+    <!-- Add audio elements -->
+    <audio id="confettiSound" src="audio\hat.mp3"></audio>
+    <audio id="screamerSound" src="audio\scala.mp3"></audio>
+    
+    <script>
+        document.getElementById('toggleSwitch').addEventListener('change', function() {
+            const screamer = document.getElementById('screamer');
+            const confettiSound = document.getElementById('confettiSound');
+            const screamerSound = document.getElementById('screamerSound');
+            
+            if (this.checked) {
+                confettiSound.play();
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+                confetti({
+                    particleCount: 100,
+                    spread: 120,
+                    origin: { y: 0.6 }
+                });
+                screamer.classList.remove('show');
+            } else {
+                screamerSound.play();
+                screamer.classList.add('show');
+                setTimeout(() => screamer.classList.remove('show'), 3500); // Скример будет показан в течение 2 секунд
+            }
+        });
+    </script>
+</body>
+</html>
